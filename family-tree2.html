@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Family Tree</title>
+  <style>
+    :root {
+      --male: #3b82f6;
+      --female: #f59e0b;
+      --unknown: #9ca3af;
+      --card-bg: #ffffff;
+      --edge-parent: #64748b;
+      --edge-adoptive: #0ea5e9;
+      --edge-spouse: #8b5cf6;
+      --bg: #f8fafc;
+    }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); }
+    .topbar {
+      position: sticky; top: 0; z-index: 10; background: #111827; color: #f9fafb;
+      padding: 10px 14px; font-size: 14px; display: flex; gap: 16px; align-items: center;
+    }
+    .legend { display: inline-flex; align-items: center; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .wrap { padding: 12px; }
+    .canvas-wrap { border: 1px solid #cbd5e1; background: #fff; overflow: auto; border-radius: 8px; }
+    svg { display: block; }
+    .node rect {
+      fill: var(--card-bg);
+      stroke-width: 2;
+      rx: 10;
+      ry: 10;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,.06));
+    }
+    .node.male rect { stroke: var(--male); }
+    .node.female rect { stroke: var(--female); }
+    .node.unknown rect { stroke: var(--unknown); }
+    .node text.name { font-size: 12px; font-weight: 700; fill: #0f172a; }
+    .node text.family { font-size: 11px; fill: #334155; }
+    .node text.sub { font-size: 10px; fill: #64748b; }
+    .lvl-label { font-size: 12px; fill: #475569; }
+    .edge-parent { stroke: var(--edge-parent); stroke-width: 1.5; fill: none; }
+    .edge-adoptive { stroke: var(--edge-adoptive); stroke-width: 1.5; stroke-dasharray: 5 3; fill: none; }
+    .edge-spouse { stroke: var(--edge-spouse); stroke-width: 1.8; fill: none; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <strong>Family Tree (Layered)</strong>
+    <span class="legend"><i class="dot" style="background:#3b82f6"></i>Nam</span>
+    <span class="legend"><i class="dot" style="background:#f59e0b"></i>Nữ</span>
+    <span class="legend"><i class="dot" style="background:#8b5cf6"></i>Vợ/Chồng</span>
+    <span class="legend"><i class="dot" style="background:#64748b"></i>Cha/Mẹ</span>
+    <span class="legend"><i class="dot" style="background:#0ea5e9"></i>Cha/Mẹ nuôi (nét đứt)</span>
+  </div>
+  <div class="wrap">
+    <div class="canvas-wrap">
+      <svg id="chart" width="2000" height="1200" aria-label="family tree"></svg>
+    </div>
+  </div>
+
+  <script>
+    const people = {
+      p1: { name: 'Nguyễn Hải Quyền', gender: 'male', birthYear: 1979, birthOrder: 1 },
+      p2: { name: 'Nguyễn Toàn Thắng', gender: 'male', birthYear: 1954, birthOrder: 2 },
+      p3: { name: 'Hà Kim Tiến', gender: 'female', birthYear: 1956, birthOrder: 3 },
+      p5: { name: 'Nguyễn Huy Nhiệm', gender: 'male', birthYear: 1980, birthOrder: 2 },
+      p6: { name: 'Nguyễn Văn Truyền', gender: 'male', birthOrder: 5 },
+      p7: { name: 'Lê Thị Thưởng', gender: 'female', birthOrder: 4 },
+      p8: { name: 'Nguyễn Thành Quân', gender: 'male', birthYear: 1950, birthOrder: 1 },
+      p9: { name: 'Nguyễn Thị Bính', gender: 'female', birthYear: 1956, birthOrder: 3 },
+      p10: { name: 'Nguyễn Thị Trinh', gender: 'female', birthYear: 1960, birthOrder: 4 },
+      p11: { name: 'Nguyễn Văn Phê', gender: 'male', birthYear: 1962, birthOrder: 5 },
+      p12: { name: 'Nguyễn Toàn Văn', gender: 'male', birthYear: 1964, birthOrder: 6 },
+      p13: { name: 'Nguyễn Văn Bằng', gender: 'male', birthOrder: 3 },
+      p14: { name: 'Võ Văn Hồng', gender: 'male' },
+      p15: { name: 'Võ Nguyễn Trang Phương', gender: 'female', birthYear: 1988, birthOrder: 1 },
+      p16: { name: 'Võ Nguyễn Phương Quyên', gender: 'female', birthYear: 1997, birthOrder: 2 },
+      p17: { name: 'Nguyễn Quang Ngô', gender: 'male' },
+      p18: { name: 'Nguyễn Phương Nghi', gender: 'female', birthYear: 2018, birthOrder: 1, tag: 'aka Moon' },
+      p19: { name: 'Nguyễn Phạm Minh Thư', gender: 'female', birthYear: 2012, birthOrder: 1 },
+      p20: { name: 'Giang Thị Tiền', gender: 'female' },
+      p21: { name: 'Nguyễn Hoàng Vĩnh', gender: 'male', birthOrder: 1 },
+      p22: { name: 'Nguyễn Hoàng Yến Vy', gender: 'female', birthOrder: 2 },
+      p23: { name: 'Nguyễn Văn Nương', gender: 'male' },
+      p24: { name: 'Trương Thị Đáng', gender: 'female' },
+      p25: { name: 'Nguyễn Văn Châu', gender: 'male', birthOrder: 2 },
+      p26: { name: '5 Ro', gender: 'male', birthOrder: 4, tag: 'aka' },
+      p27: { name: '7 Re', gender: 'male', birthOrder: 6, tag: 'aka' },
+      p28: { name: '8 Khoe', gender: 'male', birthOrder: 7, tag: 'aka' },
+      p29: { name: 'Nguyễn Văn Hậu', gender: 'male' },
+      p30: { name: 'Lê Văn Thôi', gender: 'male' },
+      p31: { name: 'Huỳnh Thị Thanh', gender: 'female' },
+      p32: { name: 'Lê Văn Xinh', gender: 'male', birthOrder: 2, tag: 'aka ông 3' },
+      p33: { name: 'Lê Văn Cưởng', gender: 'male' },
+      p34: { name: 'Đặng Thị Hiếu', gender: 'female', birthOrder: 5, tag: 'aka bà 6' },
+      p35: { name: '3 Mi', gender: 'male', birthOrder: 2, tag: 'aka' },
+      p36: { name: '6 Ren', gender: 'male', birthOrder: 5, tag: 'aka' },
+      p37: { name: 'Nguyễn Văn Thống', gender: 'male', birthOrder: 3, tag: 'aka ông Tư' },
+      p38: { name: 'Nguyễn Văn Hoa', gender: 'male', birthOrder: 6 },
+      p39: { name: 'Nguyễn Thị Bông', gender: 'female', birthOrder: 7, tag: 'aka bà Tám' },
+      p40: { name: 'Nguyễn Thị Yến Loan', gender: 'female', birthOrder: 1 },
+      p41: { name: 'Nguyễn Thu Hiền', gender: 'female', birthOrder: 1 },
+      p42: { name: 'Nguyễn Hoà Tú Yên', gender: 'female', birthYear: 2011, birthOrder: 1 },
+      p43: { name: 'Nguyễn ? Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 },
+      p44: { name: 'Đặng ? ?', gender: 'male', birthOrder: 6, tag: 'aka 7 Đực' }
+    };
+
+    const spouseEdges = [
+      ['p23','p24'], ['p30','p31'], ['p6','p7'], ['p2','p3'], ['p9','p13'], ['p10','p14'], ['p15','p17'], ['p12','p20'], ['p5','p41']
+    ];
+
+    const parentEdges = [
+      ['p6','p2'], ['p7','p2'],
+      ['p2','p1'], ['p2','p5'], ['p3','p1'], ['p3','p5'],
+      ['p6','p9'], ['p6','p10'], ['p6','p11'], ['p6','p12'],
+      ['p7','p9'], ['p7','p10'], ['p7','p11'], ['p7','p12'],
+      ['p10','p15'], ['p10','p16'], ['p14','p15'], ['p14','p16'],
+      ['p15','p18'], ['p17','p18'],
+      ['p1','p19'],
+      ['p12','p21'], ['p12','p22'], ['p20','p21'], ['p20','p22'],
+      ['p23','p6'], ['p24','p6'],
+      ['p23','p25'], ['p24','p25'],
+      ['p23','p37'], ['p24','p37'],
+      ['p23','p38'], ['p24','p38'],
+      ['p23','p39'], ['p24','p39'],
+      ['p25','p26'], ['p25','p27'], ['p25','p28'],
+      ['p25','p35'], ['p25','p36'],
+      ['p28','p29'],
+      ['p5','p42'], ['p41','p42'],
+      ['p5','p43'], ['p41','p43'],
+      ['p30','p7'], ['p31','p7'],
+      ['p30','p32'], ['p31','p32'],
+      ['p30','p33'], ['p31','p33'],
+      ['p31','p34'],
+      ['p31','p44']
+    ];
+
+    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'], ['p37','p40'] ];
+
+    const ids = Object.keys(people);
+    const gen = Object.fromEntries(ids.map(id => [id, null]));
+    gen.p1 = 0;
+
+    const parentsOf = Object.fromEntries(ids.map(id => [id, []]));
+    const childrenOf = Object.fromEntries(ids.map(id => [id, []]));
+    for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
+      if (parentsOf[c]) parentsOf[c].push(p);
+      if (childrenOf[p]) childrenOf[p].push(c);
+    }
+
+    function siblingPairs() {
+      const pairs = [];
+      for (const par of ids) {
+        const kids = childrenOf[par] || [];
+        for (let i = 0; i < kids.length; i++) {
+          for (let j = i + 1; j < kids.length; j++) pairs.push([kids[i], kids[j]]);
+        }
+      }
+      return pairs;
+    }
+
+    const sibPairs = siblingPairs();
+    let changed = true;
+    let iter = 0;
+    while (changed && iter < 60) {
+      changed = false;
+      iter += 1;
+      for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
+        if (gen[p] != null && gen[c] == null) { gen[c] = gen[p] + 1; changed = true; }
+        if (gen[c] != null && gen[p] == null) { gen[p] = gen[c] - 1; changed = true; }
+      }
+      for (const [a, b] of spouseEdges) {
+        if (gen[a] != null && gen[b] == null) { gen[b] = gen[a]; changed = true; }
+        if (gen[b] != null && gen[a] == null) { gen[a] = gen[b]; changed = true; }
+      }
+      for (const [a, b] of sibPairs) {
+        if (gen[a] != null && gen[b] == null) { gen[b] = gen[a]; changed = true; }
+        if (gen[b] != null && gen[a] == null) { gen[a] = gen[b]; changed = true; }
+      }
+    }
+    for (const id of ids) if (gen[id] == null) gen[id] = 99;
+
+    const groups = {};
+    for (const id of ids) {
+      groups[gen[id]] = groups[gen[id]] || [];
+      groups[gen[id]].push(id);
+    }
+
+    const spouseMap = {};
+    for (const [a, b] of spouseEdges) {
+      spouseMap[a] = b;
+      spouseMap[b] = a;
+    }
+
+    const parentList = Object.fromEntries(ids.map(id => [id, []]));
+    for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
+      if (parentList[c]) parentList[c].push(p);
+    }
+
+    function pairSpousesAdjacent(row, g) {
+      const inRow = new Set(row);
+      const used = new Set();
+      const out = [];
+      for (const id of row) {
+        if (used.has(id)) continue;
+        const sp = spouseMap[id];
+        if (sp && inRow.has(sp) && !used.has(sp)) {
+          const first = people[id].gender === 'male' ? id : sp;
+          const second = first === id ? sp : id;
+          out.push(first, second);
+          used.add(id);
+          used.add(sp);
+        } else {
+          out.push(id);
+          used.add(id);
+        }
+      }
+      return out;
+    }
+
+    function reorderByPreferredIds(row, preferredIds) {
+      const inRow = new Set(row);
+      const out = [];
+      for (const id of preferredIds) {
+        if (inRow.has(id)) out.push(id);
+      }
+      for (const id of row) {
+        if (!out.includes(id)) out.push(id);
+      }
+      return out;
+    }
+
+    const gens = Object.keys(groups).map(Number).sort((a, b) => a - b);
+    gens.forEach((g, rowIdx) => {
+      let row = [...groups[g]];
+      if (rowIdx === 0) {
+        row.sort((a, b) => people[a].name.localeCompare(people[b].name, 'vi'));
+      } else {
+        const prev = groups[gens[rowIdx - 1]] || [];
+        const prevIdx = Object.fromEntries(prev.map((id, i) => [id, i]));
+        row.sort((a, b) => {
+          const pa = (parentList[a] || []).filter((p) => gen[p] === g - 1 && prevIdx[p] != null);
+          const pb = (parentList[b] || []).filter((p) => gen[p] === g - 1 && prevIdx[p] != null);
+          const aa = pa.length ? pa.reduce((s, p) => s + prevIdx[p], 0) / pa.length : 1e9;
+          const bb = pb.length ? pb.reduce((s, p) => s + prevIdx[p], 0) / pb.length : 1e9;
+          if (aa !== bb) return aa - bb;
+          const ya = Number(people[a].birthYear);
+          const yb = Number(people[b].birthYear);
+          const aHasYear = Number.isFinite(ya);
+          const bHasYear = Number.isFinite(yb);
+          if (aHasYear && bHasYear && ya !== yb) return ya - yb;
+          if (aHasYear !== bHasYear) return aHasYear ? -1 : 1;
+          return people[a].name.localeCompare(people[b].name, 'vi');
+        });
+      }
+      row = pairSpousesAdjacent(row, g);
+
+      // Temporary manual layout hints (HTML-only):
+      // - Keep p23/p24 to the left of p30/p31 on generation -3.
+      // - On generation -2, move Nguyen branch to the left,
+      //   while keeping p6/p7 centered as the main pair.
+      if (g === -3) {
+        row = reorderByPreferredIds(row, ['p23', 'p24', 'p30', 'p31']);
+      }
+      if (g === -2) {
+        const leftNguyen = row.filter((id) =>
+          id !== 'p6' &&
+          id !== 'p7' &&
+          (people[id]?.name || '').startsWith('Nguyễn ')
+        );
+        const centerMain = row.filter((id) => id === 'p6' || id === 'p7');
+        const used = new Set([...leftNguyen, ...centerMain]);
+        const rest = row.filter((id) => !used.has(id));
+        row = [...leftNguyen, ...centerMain, ...rest];
+
+        // Keep p44 to the right of p34.
+        const i34 = row.indexOf('p34');
+        const i44 = row.indexOf('p44');
+        if (i34 !== -1 && i44 !== -1 && i44 < i34) {
+          row.splice(i44, 1);
+          row.splice(i34, 0, 'p44');
+        }
+      }
+      row = pairSpousesAdjacent(row, g);
+      groups[g] = row;
+    });
+
+    function splitDisplayName(full) {
+      const parts = (full || '').trim().split(/\s+/).filter(Boolean);
+      if (parts.length <= 1) return { given: '', family: full || '' };
+      return { given: parts.slice(1).join(' '), family: parts[0] };
+    }
+
+    const nodeH = 60;
+    const xGap = 24;
+    const yGap = 84;
+    const margin = 70;
+    const padX = 8;
+    const minNodeW = 88;
+    const maxNodeW = 260;
+
+    const measureCanvas = document.createElement('canvas');
+    const measureCtx = measureCanvas.getContext('2d');
+    function measureText(text, font) {
+      if (!measureCtx) return (text || '').length * 7;
+      measureCtx.font = font;
+      return measureCtx.measureText(text || '').width;
+    }
+
+    const nodeMeta = {};
+    for (const id of ids) {
+      const person = people[id];
+      const display = splitDisplayName(person.name);
+      const sub = `${person.birthOrder ?? '-'} | gen ${gen[id]}${person.tag ? ' | ' + person.tag : ''}`;
+      const wFamily = measureText(display.family || person.name, '700 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
+      const wGiven = measureText(display.given || ' ', '400 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
+      const wSub = measureText(sub, '400 10px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
+      const w = Math.max(minNodeW, Math.min(maxNodeW, Math.ceil(Math.max(wFamily, wGiven, wSub) + padX * 2 + 2)));
+      nodeMeta[id] = { display, sub, w };
+    }
+
+    const provisionalPos = {};
+    gens.forEach((g, row) => {
+      const arr = groups[g] || [];
+      if (!arr.length) return;
+
+      const widths = arr.map((id) => nodeMeta[id]?.w || minNodeW);
+      const desiredLeft = new Array(arr.length).fill(null);
+      const idxOf = Object.fromEntries(arr.map((id, i) => [id, i]));
+
+      for (let i = 0; i < arr.length; i++) {
+        const id = arr[i];
+        const w = widths[i];
+        const pars = (parentList[id] || []).filter((p) => gen[p] === g - 1 && provisionalPos[p]);
+        if (pars.length) {
+          const center = pars.reduce((s, p) => s + (provisionalPos[p].x + provisionalPos[p].w / 2), 0) / pars.length;
+          desiredLeft[i] = center - w / 2;
+          continue;
+        }
+
+        const sp = spouseMap[id];
+        const spIdx = sp != null ? idxOf[sp] : null;
+        if (spIdx != null && spIdx < i && desiredLeft[spIdx] != null) {
+          desiredLeft[i] = desiredLeft[spIdx] + widths[spIdx] + xGap;
+          continue;
+        }
+        if (spIdx != null && spIdx > i && desiredLeft[spIdx] != null) {
+          desiredLeft[i] = desiredLeft[spIdx] - w - xGap;
+          continue;
+        }
+
+        if (i === 0) desiredLeft[i] = 0;
+        else desiredLeft[i] = desiredLeft[i - 1] + widths[i - 1] + xGap;
+      }
+
+      const x = [...desiredLeft];
+      for (let i = 1; i < arr.length; i++) {
+        const minLeft = x[i - 1] + widths[i - 1] + xGap;
+        if (x[i] < minLeft) x[i] = minLeft;
+      }
+
+      for (let round = 0; round < 120; round++) {
+        let moved = false;
+        for (let i = 0; i < arr.length; i++) {
+          let minLeft = -Infinity;
+          let maxLeft = Infinity;
+          if (i > 0) minLeft = x[i - 1] + widths[i - 1] + xGap;
+          if (i < arr.length - 1) maxLeft = x[i + 1] - widths[i] - xGap;
+
+          const target = Math.min(maxLeft, Math.max(minLeft, desiredLeft[i]));
+          const nextX = x[i] + (target - x[i]) * 0.35;
+          if (Math.abs(nextX - x[i]) > 0.05) {
+            x[i] = nextX;
+            moved = true;
+          }
+        }
+        if (!moved) break;
+      }
+
+      const y = margin + row * (nodeH + yGap);
+      for (let i = 0; i < arr.length; i++) {
+        provisionalPos[arr[i]] = { x: x[i], y, w: widths[i] };
+      }
+    });
+
+    // Temporary manual layout: shift whole gen -2 to the center of gen -1.
+    const genMinus2 = groups[-2] || [];
+    const genMinus1 = groups[-1] || [];
+    if (genMinus2.length && genMinus1.length) {
+      const rowCenter = (idsInRow) => {
+        const left = Math.min(...idsInRow.map((id) => provisionalPos[id].x));
+        const right = Math.max(...idsInRow.map((id) => provisionalPos[id].x + provisionalPos[id].w));
+        return (left + right) / 2;
+      };
+      const shift = rowCenter(genMinus1) - rowCenter(genMinus2);
+      for (const id of genMinus2) {
+        provisionalPos[id].x += shift;
+      }
+    }
+
+    // Temporary manual layout for gen -3:
+    // - center pair p23/p24 on p38
+    // - center pair p30/p31 on p33
+    const centerNode = (id) => provisionalPos[id] ? (provisionalPos[id].x + provisionalPos[id].w / 2) : null;
+    const shiftPairToTarget = (a, b, target) => {
+      if (!provisionalPos[a] || !provisionalPos[b] || !provisionalPos[target]) return;
+      const pairCenter = (centerNode(a) + centerNode(b)) / 2;
+      const targetCenter = centerNode(target);
+      const dx = targetCenter - pairCenter;
+      provisionalPos[a].x += dx;
+      provisionalPos[b].x += dx;
+    };
+    shiftPairToTarget('p23', 'p24', 'p38');
+    shiftPairToTarget('p30', 'p31', 'p33');
+
+    const allPos = Object.values(provisionalPos);
+    const minX = allPos.length ? Math.min(...allPos.map((p) => p.x)) : 0;
+    const maxX = allPos.length ? Math.max(...allPos.map((p) => p.x + p.w)) : 0;
+    const width = Math.max(1600, Math.ceil((maxX - minX) + margin * 2));
+    const height = Math.max(900, margin * 2 + gens.length * (nodeH + yGap));
+    const shiftX = margin - minX;
+
+    const svg = document.getElementById('chart');
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
+
+    const pos = {};
+    for (const id of Object.keys(provisionalPos)) {
+      const p = provisionalPos[id];
+      pos[id] = { x: p.x + shiftX, y: p.y, w: p.w };
+    }
+
+    gens.forEach((g, row) => {
+      const y = margin + row * (nodeH + yGap);
+      const lvl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lvl.setAttribute('x', 16);
+      lvl.setAttribute('y', y + 16);
+      lvl.setAttribute('class', 'lvl-label');
+      lvl.textContent = `Gen ${g}`;
+      svg.appendChild(lvl);
+    });
+
+    function drawPath(x1, y1, x2, y2, cls) {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const mx = (x1 + x2) / 2;
+      // Keep parent-side curvature, but make child-side approach more vertical.
+      const dy = Math.max(0, y2 - y1);
+      const childCtrlY = y2 - Math.max(18, Math.min(56, dy * 0.5));
+      p.setAttribute('d', `M ${x1} ${y1} C ${mx} ${y1}, ${x2} ${childCtrlY}, ${x2} ${y2}`);
+      p.setAttribute('class', cls);
+      svg.appendChild(p);
+    }
+
+    function drawLine(x1, y1, x2, y2, cls) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('class', cls);
+      svg.appendChild(line);
+    }
+
+    for (const [a, b] of spouseEdges) {
+      if (!pos[a] || !pos[b]) continue;
+      const y1 = pos[a].y + nodeH / 2;
+      const y2 = pos[b].y + nodeH / 2;
+      const aOnLeft = pos[a].x <= pos[b].x;
+      const x1 = aOnLeft ? pos[a].x + pos[a].w : pos[a].x;
+      const x2 = aOnLeft ? pos[b].x : pos[b].x + pos[b].w;
+      drawLine(x1, y1, x2, y2, 'edge-spouse');
+    }
+
+    const spousePairSet = new Set();
+    for (const [a, b] of spouseEdges) {
+      spousePairSet.add(a < b ? `${a}|${b}` : `${b}|${a}`);
+    }
+
+    function drawMergedParentLinks(edges, cls) {
+      const byChild = {};
+      const drawnDrop = new Set();
+      const drawnFan = new Set();
+      for (const [p, c] of edges) {
+        byChild[c] = byChild[c] || [];
+        byChild[c].push(p);
+      }
+
+      for (const [c, pars] of Object.entries(byChild)) {
+        if (!pos[c]) continue;
+        const uniqPars = [...new Set(pars)].filter((p) => !!pos[p]);
+        let merged = false;
+
+        if (uniqPars.length >= 2) {
+          for (let i = 0; i < uniqPars.length && !merged; i++) {
+            for (let j = i + 1; j < uniqPars.length && !merged; j++) {
+              const a = uniqPars[i];
+              const b = uniqPars[j];
+              const k = a < b ? `${a}|${b}` : `${b}|${a}`;
+              if (!spousePairSet.has(k)) continue;
+
+              const ax = pos[a].x + pos[a].w / 2;
+              const bx = pos[b].x + pos[b].w / 2;
+              const px = (ax + bx) / 2;
+              const sy = Math.max(pos[a].y, pos[b].y) + nodeH / 2;
+              const py = Math.max(pos[a].y, pos[b].y) + nodeH + 14;
+
+              const dropKey = `${cls}|${k}`;
+              if (!drawnDrop.has(dropKey)) {
+                drawLine(px, sy, px, py, 'edge-spouse');
+                drawnDrop.add(dropKey);
+              }
+
+              const fanKey = `${cls}|${k}`;
+              if (!drawnFan.has(fanKey)) {
+                drawLine(ax, pos[a].y + nodeH, px, py, cls);
+                drawLine(bx, pos[b].y + nodeH, px, py, cls);
+                drawnFan.add(fanKey);
+              }
+
+              const cx = pos[c].x + pos[c].w / 2;
+              drawPath(px, py, cx, pos[c].y, cls);
+              merged = true;
+            }
+          }
+        }
+
+        if (!merged) {
+          for (const p of uniqPars) {
+            const x1 = pos[p].x + pos[p].w / 2;
+            const y1 = pos[p].y + nodeH;
+            const x2 = pos[c].x + pos[c].w / 2;
+            const y2 = pos[c].y;
+            drawPath(x1, y1, x2, y2, cls);
+          }
+        }
+      }
+    }
+
+    drawMergedParentLinks(parentEdges, 'edge-parent');
+    drawMergedParentLinks(adoptiveEdges, 'edge-adoptive');
+
+    for (const id of ids) {
+      const person = people[id];
+      const p = pos[id];
+      if (!p) continue;
+
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `node ${person.gender || 'unknown'}`);
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', p.x);
+      rect.setAttribute('y', p.y);
+      rect.setAttribute('width', p.w);
+      rect.setAttribute('height', nodeH);
+      g.appendChild(rect);
+
+      const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t1.setAttribute('x', p.x + padX);
+      t1.setAttribute('y', p.y + 20);
+      t1.setAttribute('class', 'name');
+      t1.textContent = nodeMeta[id].display.family || person.name;
+      g.appendChild(t1);
+
+      const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t2.setAttribute('x', p.x + padX);
+      t2.setAttribute('y', p.y + 34);
+      t2.setAttribute('class', 'family');
+      t2.textContent = nodeMeta[id].display.given || '';
+      g.appendChild(t2);
+
+      const t3 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t3.setAttribute('x', p.x + padX);
+      t3.setAttribute('y', p.y + 50);
+      t3.setAttribute('class', 'sub');
+      t3.textContent = nodeMeta[id].sub;
+      g.appendChild(t3);
+
+      svg.appendChild(g);
+    }
+  </script>
+</body>
+</html>
