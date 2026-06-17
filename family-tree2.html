@@ -108,7 +108,8 @@
       p46: { name: '4 Ron', gender: 'male', birthOrder: 3, tag: 'aka' },
       p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
       p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
-      p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 }
+      p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
+      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 }
     };
 
     const spouseEdges = [
@@ -171,6 +172,7 @@
       ['p31','p7'],
       ['p31','p32'],
       ['p31','p33'],
+      ['p32','p50'],
       ['p31','p34'],
       ['p31','p44'],
       ['p5','p42'],
@@ -307,15 +309,31 @@
         row = reorderByPreferredIds(row, ['p23', 'p24', 'p30', 'p31']);
       }
       if (g === -2) {
-        const leftNguyen = row.filter((id) =>
-          id !== 'p6' &&
-          id !== 'p7' &&
-          (people[id]?.name || '').startsWith('Nguyễn ')
+        // Reorder only the p23/p24 sibling branch (p25 side) by birthOrder.
+        // Keep p6 in its current slot to preserve the p6/p7 main couple position.
+        const p2523SiblingSet = new Set(
+          row.filter((id) => {
+            const parents = parentList[id] || [];
+            return parents.includes('p23') && parents.includes('p24');
+          })
         );
-        const centerMain = row.filter((id) => id === 'p6' || id === 'p7');
-        const used = new Set([...leftNguyen, ...centerMain]);
-        const rest = row.filter((id) => !used.has(id));
-        row = [...leftNguyen, ...centerMain, ...rest];
+        const sortedP2523Siblings = row
+          .filter((id) => p2523SiblingSet.has(id) && id !== 'p6')
+          .sort((a, b) => {
+            const oa = Number(people[a].birthOrder);
+            const ob = Number(people[b].birthOrder);
+            const aHasOrder = Number.isFinite(oa);
+            const bHasOrder = Number.isFinite(ob);
+            if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
+            if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+            return (people[a]?.name || '').localeCompare(people[b]?.name || '', 'vi');
+          });
+        let iSibling = 0;
+        row = row.map((id) => {
+          if (id === 'p6') return id;
+          if (!p2523SiblingSet.has(id)) return id;
+          return sortedP2523Siblings[iSibling++];
+        });
 
         // Keep p44 to the right of p34.
         const i34 = row.indexOf('p34');
@@ -465,6 +483,10 @@
     const shiftX = margin - minX;
 
     const svg = document.getElementById('chart');
+    const publicChartUrl = 'https://kalipsal.github.io/my-fam-chart-public/family-tree.html';
+    const publicChart2Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree2.html';
+    const publicChart3Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree3.html';
+    const publicChart4Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree4.html';
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
@@ -590,6 +612,18 @@
 
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', `node ${person.gender || 'unknown'}`);
+      const targetUrl =
+        (id === 'p6' || id === 'p7') ? publicChartUrl :
+        (id === 'p25') ? publicChart2Url :
+        (id === 'p32') ? publicChart3Url :
+        (id === 'p34') ? publicChart4Url :
+        null;
+      if (targetUrl) {
+        g.style.cursor = 'pointer';
+        g.addEventListener('click', () => {
+          window.location.href = targetUrl;
+        });
+      }
 
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       rect.setAttribute('x', p.x);

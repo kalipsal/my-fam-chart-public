@@ -99,7 +99,6 @@
       p37: { name: 'Nguyễn Văn Thống', gender: 'male', birthOrder: 3, tag: 'aka ông Tư' },
       p38: { name: 'Nguyễn Văn Hoa', gender: 'male', birthOrder: 6 },
       p39: { name: 'Nguyễn Thị Bông', gender: 'female', birthOrder: 7, tag: 'aka bà Tám' },
-      p40: { name: 'Nguyễn Thị Yến Loan', gender: 'female', birthOrder: 1 },
       p41: { name: 'Nguyễn Thu Hiền', gender: 'female', birthOrder: 1 },
       p42: { name: 'Nguyễn Hoà Tú Yên', gender: 'female', birthYear: 2011, birthOrder: 1 },
       p43: { name: 'Nguyễn Đăng Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 },
@@ -109,7 +108,12 @@
       p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
       p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
       p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
-      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 }
+      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 },
+      p58: { name: 'Tư Lấm', gender: 'female', birthOrder: 3, tag: 'aka' },
+      p59: { name: '9 Mai', gender: 'female', birthOrder: 8, tag: 'aka' },
+      p60: { name: 'Út Lập', gender: 'male', birthOrder: 9, tag: 'aka' },
+      p61: { name: 'Quỳ', gender: 'male', tag: 'aka' },
+      p62: { name: 'Xô', gender: 'male', tag: 'aka' }
     };
 
     const spouseEdges = [
@@ -174,21 +178,26 @@
       ['p31','p33'],
       ['p32','p50'],
       ['p31','p34'],
+      ['p34','p58'],
+      ['p34','p59'],
+      ['p34','p60'],
+      ['p58','p61'],
+      ['p58','p62'],
       ['p31','p44'],
       ['p5','p42'],
       ['p5','p43'],
       ['p41','p42'],
       ['p41','p43']
     ];
-    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'], ['p37','p40'] ];
+    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'] ];
 
 
-    const ids = Object.keys(people);
-    const gen = Object.fromEntries(ids.map(id => [id, null]));
+    const allIds = Object.keys(people);
+    const gen = Object.fromEntries(allIds.map(id => [id, null]));
     gen.p1 = 0;
 
-    const parentsOf = Object.fromEntries(ids.map(id => [id, []]));
-    const childrenOf = Object.fromEntries(ids.map(id => [id, []]));
+    const parentsOf = Object.fromEntries(allIds.map(id => [id, []]));
+    const childrenOf = Object.fromEntries(allIds.map(id => [id, []]));
     for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
       if (parentsOf[c]) parentsOf[c].push(p);
       if (childrenOf[p]) childrenOf[p].push(c);
@@ -196,7 +205,7 @@
 
     function siblingPairs() {
       const pairs = [];
-      for (const par of ids) {
+      for (const par of allIds) {
         const kids = childrenOf[par] || [];
         for (let i = 0; i < kids.length; i++) {
           for (let j = i + 1; j < kids.length; j++) pairs.push([kids[i], kids[j]]);
@@ -224,7 +233,21 @@
         if (gen[b] != null && gen[a] == null) { gen[a] = gen[b]; changed = true; }
       }
     }
-    for (const id of ids) if (gen[id] == null) gen[id] = 99;
+    for (const id of allIds) if (gen[id] == null) gen[id] = 99;
+
+    // Tree3 variant: hide p25 descendants on gen -1 and gen 0.
+    const p25Descendants = new Set();
+    const stack = [...(childrenOf.p25 || [])];
+    while (stack.length) {
+      const id = stack.pop();
+      if (p25Descendants.has(id)) continue;
+      p25Descendants.add(id);
+      for (const child of childrenOf[id] || []) stack.push(child);
+    }
+    const hiddenIds = new Set(
+      [...p25Descendants].filter((id) => gen[id] === -1 || gen[id] === 0)
+    );
+    const ids = allIds.filter((id) => !hiddenIds.has(id));
 
     const groups = {};
     for (const id of ids) {
@@ -238,7 +261,7 @@
       spouseMap[b] = a;
     }
 
-    const parentList = Object.fromEntries(ids.map(id => [id, []]));
+    const parentList = Object.fromEntries(allIds.map(id => [id, []]));
     for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
       if (parentList[c]) parentList[c].push(p);
     }
@@ -342,6 +365,25 @@
           row.splice(i44, 1);
           row.splice(i34, 0, 'p44');
         }
+      }
+      // Keep p34 children ordered by birthOrder (p58..p60 branch).
+      const p34ChildSet = new Set(
+        row.filter((id) => (parentList[id] || []).includes('p34'))
+      );
+      if (p34ChildSet.size > 1) {
+        const sortedP34Children = row
+          .filter((id) => p34ChildSet.has(id))
+          .sort((a, b) => {
+            const oa = Number(people[a].birthOrder);
+            const ob = Number(people[b].birthOrder);
+            const aHasOrder = Number.isFinite(oa);
+            const bHasOrder = Number.isFinite(ob);
+            if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
+            if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+            return (people[a]?.name || '').localeCompare(people[b]?.name || '', 'vi');
+          });
+        let iP34 = 0;
+        row = row.map((id) => (p34ChildSet.has(id) ? sortedP34Children[iP34++] : id));
       }
       row = pairSpousesAdjacent(row, g);
       groups[g] = row;

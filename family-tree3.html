@@ -99,7 +99,6 @@
       p37: { name: 'Nguyễn Văn Thống', gender: 'male', birthOrder: 3, tag: 'aka ông Tư' },
       p38: { name: 'Nguyễn Văn Hoa', gender: 'male', birthOrder: 6 },
       p39: { name: 'Nguyễn Thị Bông', gender: 'female', birthOrder: 7, tag: 'aka bà Tám' },
-      p40: { name: 'Nguyễn Thị Yến Loan', gender: 'female', birthOrder: 1 },
       p41: { name: 'Nguyễn Thu Hiền', gender: 'female', birthOrder: 1 },
       p42: { name: 'Nguyễn Hoà Tú Yên', gender: 'female', birthYear: 2011, birthOrder: 1 },
       p43: { name: 'Nguyễn Đăng Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 },
@@ -109,7 +108,14 @@
       p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
       p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
       p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
-      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 }
+      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 },
+      p51: { name: '2 Tí', gender: 'male', birthOrder: 1, tag: 'aka' },
+      p52: { name: 'bé 3', gender: 'female', birthOrder: 2, tag: 'aka' },
+      p53: { name: 'bé 4', gender: 'female', birthOrder: 3, tag: 'aka' },
+      p54: { name: 'bé 5', gender: 'female', birthOrder: 4, tag: 'aka' },
+      p55: { name: 'bé 6', gender: 'female', birthOrder: 5, tag: 'aka' },
+      p56: { name: '7 Hòn', gender: 'male', birthOrder: 6, tag: 'aka' },
+      p57: { name: '8', gender: 'male', birthOrder: 7, tag: 'aka' }
     };
 
     const spouseEdges = [
@@ -173,6 +179,13 @@
       ['p31','p32'],
       ['p31','p33'],
       ['p32','p50'],
+      ['p50','p51'],
+      ['p50','p52'],
+      ['p50','p53'],
+      ['p50','p54'],
+      ['p50','p55'],
+      ['p50','p56'],
+      ['p50','p57'],
       ['p31','p34'],
       ['p31','p44'],
       ['p5','p42'],
@@ -180,15 +193,15 @@
       ['p41','p42'],
       ['p41','p43']
     ];
-    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'], ['p37','p40'] ];
+    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'] ];
 
 
-    const ids = Object.keys(people);
-    const gen = Object.fromEntries(ids.map(id => [id, null]));
+    const allIds = Object.keys(people);
+    const gen = Object.fromEntries(allIds.map(id => [id, null]));
     gen.p1 = 0;
 
-    const parentsOf = Object.fromEntries(ids.map(id => [id, []]));
-    const childrenOf = Object.fromEntries(ids.map(id => [id, []]));
+    const parentsOf = Object.fromEntries(allIds.map(id => [id, []]));
+    const childrenOf = Object.fromEntries(allIds.map(id => [id, []]));
     for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
       if (parentsOf[c]) parentsOf[c].push(p);
       if (childrenOf[p]) childrenOf[p].push(c);
@@ -196,7 +209,7 @@
 
     function siblingPairs() {
       const pairs = [];
-      for (const par of ids) {
+      for (const par of allIds) {
         const kids = childrenOf[par] || [];
         for (let i = 0; i < kids.length; i++) {
           for (let j = i + 1; j < kids.length; j++) pairs.push([kids[i], kids[j]]);
@@ -224,7 +237,21 @@
         if (gen[b] != null && gen[a] == null) { gen[a] = gen[b]; changed = true; }
       }
     }
-    for (const id of ids) if (gen[id] == null) gen[id] = 99;
+    for (const id of allIds) if (gen[id] == null) gen[id] = 99;
+
+    // Tree3 variant: hide p25 descendants on gen -1 and gen 0.
+    const p25Descendants = new Set();
+    const stack = [...(childrenOf.p25 || [])];
+    while (stack.length) {
+      const id = stack.pop();
+      if (p25Descendants.has(id)) continue;
+      p25Descendants.add(id);
+      for (const child of childrenOf[id] || []) stack.push(child);
+    }
+    const hiddenIds = new Set(
+      [...p25Descendants].filter((id) => gen[id] === -1 || gen[id] === 0)
+    );
+    const ids = allIds.filter((id) => !hiddenIds.has(id));
 
     const groups = {};
     for (const id of ids) {
@@ -238,7 +265,7 @@
       spouseMap[b] = a;
     }
 
-    const parentList = Object.fromEntries(ids.map(id => [id, []]));
+    const parentList = Object.fromEntries(allIds.map(id => [id, []]));
     for (const [p, c] of [...parentEdges, ...adoptiveEdges]) {
       if (parentList[c]) parentList[c].push(p);
     }
@@ -342,6 +369,25 @@
           row.splice(i44, 1);
           row.splice(i34, 0, 'p44');
         }
+      }
+      // Keep p50 children ordered by birthOrder (p51..p57 branch).
+      const p50ChildSet = new Set(
+        row.filter((id) => (parentList[id] || []).includes('p50'))
+      );
+      if (p50ChildSet.size > 1) {
+        const sortedP50Children = row
+          .filter((id) => p50ChildSet.has(id))
+          .sort((a, b) => {
+            const oa = Number(people[a].birthOrder);
+            const ob = Number(people[b].birthOrder);
+            const aHasOrder = Number.isFinite(oa);
+            const bHasOrder = Number.isFinite(ob);
+            if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
+            if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+            return (people[a]?.name || '').localeCompare(people[b]?.name || '', 'vi');
+          });
+        let iP50 = 0;
+        row = row.map((id) => (p50ChildSet.has(id) ? sortedP50Children[iP50++] : id));
       }
       row = pairSpousesAdjacent(row, g);
       groups[g] = row;
@@ -478,9 +524,10 @@
     const allPos = Object.values(provisionalPos);
     const minX = allPos.length ? Math.min(...allPos.map((p) => p.x)) : 0;
     const maxX = allPos.length ? Math.max(...allPos.map((p) => p.x + p.w)) : 0;
-    const width = Math.max(1600, Math.ceil((maxX - minX) + margin * 2));
+    const contentW = Math.max(0, maxX - minX);
+    const width = Math.max(1600, Math.ceil(contentW + margin * 2));
     const height = Math.max(900, margin * 2 + gens.length * (nodeH + yGap));
-    const shiftX = margin - minX;
+    const shiftX = (width - contentW) / 2 - minX;
 
     const svg = document.getElementById('chart');
     const publicChartUrl = 'https://kalipsal.github.io/my-fam-chart-public/family-tree.html';

@@ -6,6 +6,8 @@ Bản public của family chart.
 
 - Family Tree: https://kalipsal.github.io/my-fam-chart-public/family-tree.html
 - Family Tree 2: https://kalipsal.github.io/my-fam-chart-public/family-tree2.html
+- Family Tree 3: https://kalipsal.github.io/my-fam-chart-public/family-tree3.html
+- Family Tree 4: https://kalipsal.github.io/my-fam-chart-public/family-tree4.html
 
 ## Chạy local
 
@@ -17,3 +19,5 @@ Mở:
 
 - http://localhost:8080/family-tree.html
 - http://localhost:8080/family-tree2.html
+- http://localhost:8080/family-tree3.html
+- http://localhost:8080/family-tree4.html
