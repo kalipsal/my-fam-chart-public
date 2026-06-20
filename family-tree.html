@@ -82,7 +82,7 @@
       p20: { name: 'Giang Thị Tiền', gender: 'female' },
       p21: { name: 'Nguyễn Hoàng Vĩnh', gender: 'male', birthOrder: 1 },
       p22: { name: 'Nguyễn Hoàng Yến Vy', gender: 'female', birthOrder: 2 },
-      p23: { name: 'Nguyễn Văn Nương', gender: 'male' },
+      p23: { name: 'Nguyễn Văn Nương', gender: 'male', birthOrder: 1 },
       p24: { name: 'Trương Thị Đáng', gender: 'female' },
       p25: { name: 'Nguyễn Văn Châu', gender: 'male', birthOrder: 2 },
       p26: { name: '5 Ro', gender: 'male', birthOrder: 4, tag: 'aka' },
@@ -109,7 +109,9 @@
       p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
       p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
       p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
-      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 }
+      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 },
+      p87: { name: '???', gender: 'male' },
+      p88: { name: '10', gender: 'male', birthOrder: 9, tag: 'aka' }
     };
 
     const spouseEdges = [
@@ -143,6 +145,8 @@
       ['p20','p21'],
       ['p20','p22'],
       ['p23','p6'],
+      ['p87','p23'],
+      ['p87','p88'],
       ['p24','p6'],
       ['p23','p25'],
       ['p24','p25'],
@@ -306,7 +310,7 @@
       // - On generation -2, move Nguyen branch to the left,
       //   while keeping p6/p7 centered as the main pair.
       if (g === -3) {
-        row = reorderByPreferredIds(row, ['p23', 'p24', 'p30', 'p31']);
+        row = reorderByPreferredIds(row, ['p23', 'p24', 'p88', 'p30', 'p31']);
       }
       if (g === -2) {
         // Reorder only the p23/p24 sibling branch (p25 side) by birthOrder.
@@ -460,6 +464,21 @@
       }
     }
 
+    // Shift whole gen -4 to center on p39.
+    const genMinus4 = groups[-4] || [];
+    if (genMinus4.length && provisionalPos.p39) {
+      const rowCenter = (idsInRow) => {
+        const left = Math.min(...idsInRow.map((id) => provisionalPos[id].x));
+        const right = Math.max(...idsInRow.map((id) => provisionalPos[id].x + provisionalPos[id].w));
+        return (left + right) / 2;
+      };
+      const p39Center = provisionalPos.p39.x + provisionalPos.p39.w / 2;
+      const shift = p39Center - rowCenter(genMinus4);
+      for (const id of genMinus4) {
+        provisionalPos[id].x += shift;
+      }
+    }
+
     // Temporary manual layout for gen -3:
     // - center pair p23/p24 on p38
     // - center pair p30/p31 on p33
@@ -474,6 +493,9 @@
     };
     shiftPairToTarget('p23', 'p24', 'p38');
     shiftPairToTarget('p30', 'p31', 'p33');
+    if (provisionalPos.p88 && provisionalPos.p24) {
+      provisionalPos.p88.x = provisionalPos.p24.x + provisionalPos.p24.w + xGap;
+    }
 
     const allPos = Object.values(provisionalPos);
     const minX = allPos.length ? Math.min(...allPos.map((p) => p.x)) : 0;
