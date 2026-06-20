@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Family Tree</title>
+  <title>Family Tree 5</title>
   <style>
     :root {
       --male: #3b82f6;
@@ -46,7 +46,7 @@
 </head>
 <body>
   <div class="topbar">
-    <strong>Family Tree (Layered)</strong>
+    <strong>Family Tree 5 (Nhanh Huu Nhuong)</strong>
     <span class="legend"><i class="dot" style="background:#3b82f6"></i>Nam</span>
     <span class="legend"><i class="dot" style="background:#f59e0b"></i>Nữ</span>
     <span class="legend"><i class="dot" style="background:#8b5cf6"></i>Vợ/Chồng</span>
@@ -61,126 +61,99 @@
 
   <script>
     const people = {
-      p1: { name: 'Nguyễn Hải Quyền', gender: 'male', birthYear: 1979, birthOrder: 1 },
+      p63: { name: 'Hà Hữu Nhượng', gender: 'male' },
+      p64: { name: 'Tố Anh', gender: 'female' },
       p2: { name: 'Nguyễn Toàn Thắng', gender: 'male', birthYear: 1954, birthOrder: 2 },
       p3: { name: 'Hà Kim Tiến', gender: 'female', birthYear: 1956, birthOrder: 3 },
+      p65: { name: 'Hà Kim Nhung', gender: 'female', birthOrder: 7 },
+      p66: { name: 'Hà Gia Đình', gender: 'male', birthOrder: 1 },
+      p67: { name: 'Hà Gia Cúc', gender: 'female', birthOrder: 2 },
+      p68: { name: 'Hà Gia Tỷ', gender: 'male', birthOrder: 4 },
+      p69: { name: 'Hà', gender: 'male', birthOrder: 5 },
+      p70: { name: 'Hà Kim Huê', gender: 'female', birthOrder: 6 },
+      p71: { name: 'Hà Quốc Bảo', gender: 'male', birthOrder: 1 },
+      p72: { name: 'Hà Quốc Hùng', gender: 'male', birthOrder: 2 },
+      p73: { name: 'Hà Như Ý', gender: 'female', birthOrder: 3 },
+      p74: { name: 'Nguyễn Tường Khanh', gender: 'female', birthOrder: 1, tag: 'aka Dung' },
+      p75: { name: 'Nguyễn Sinh Nhật', gender: 'male', birthOrder: 2, tag: 'aka 10' },
+      p76: { name: 'Nguyễn Thuý Nguyên', gender: 'female', birthOrder: 3 },
+      p77: { name: 'Hà Tiểu Thanh', gender: 'female', birthOrder: 1 },
+      p78: { name: 'Cá', gender: 'male', birthOrder: 2, tag: 'aka' },
+      p79: { name: 'Nguỵ Nhường Minh', gender: 'male' },
+      p80: { name: 'Hùng', gender: 'male' },
+      p81: { name: 'Mai', gender: 'female' },
+      p82: { name: 'x', gender: 'female' },
+      p83: { name: 'Nguỵ Thuý An', gender: 'female', birthOrder: 1 },
+      p84: { name: 'Nguỵ Bối Linh', gender: 'female', birthOrder: 2 },
+      p85: { name: 'Nguỵ Nam', gender: 'male', birthOrder: 3 },
+      p86: { name: 'Hà Quốc Hào', gender: 'male', birthOrder: 1 },
+      p1: { name: 'Nguyễn Hải Quyền', gender: 'male', birthYear: 1979, birthOrder: 1 },
       p5: { name: 'Nguyễn Huy Nhiệm', gender: 'male', birthYear: 1980, birthOrder: 2 },
-      p6: { name: 'Nguyễn Văn Truyền', gender: 'male', birthOrder: 5 },
-      p7: { name: 'Lê Thị Thưởng', gender: 'female', birthOrder: 4 },
-      p8: { name: 'Nguyễn Thành Quân', gender: 'male', birthYear: 1950, birthOrder: 1 },
-      p9: { name: 'Nguyễn Thị Bính', gender: 'female', birthYear: 1956, birthOrder: 3 },
-      p10: { name: 'Nguyễn Thị Trinh', gender: 'female', birthYear: 1960, birthOrder: 4 },
-      p11: { name: 'Nguyễn Văn Phê', gender: 'male', birthYear: 1962, birthOrder: 5 },
-      p12: { name: 'Nguyễn Toàn Văn', gender: 'male', birthYear: 1964, birthOrder: 6 },
-      p13: { name: 'Nguyễn Văn Bằng', gender: 'male', birthOrder: 3 },
-      p14: { name: 'Võ Văn Hồng', gender: 'male' },
-      p15: { name: 'Võ Nguyễn Trang Phương', gender: 'female', birthYear: 1988, birthOrder: 1 },
-      p16: { name: 'Võ Nguyễn Phương Quyên', gender: 'female', birthYear: 1997, birthOrder: 2 },
-      p17: { name: 'Nguyễn Quang Ngô', gender: 'male' },
-      p18: { name: 'Nguyễn Phương Nghi', gender: 'female', birthYear: 2018, birthOrder: 1, tag: 'aka Moon' },
-      p19: { name: 'Nguyễn Phạm Minh Thư', gender: 'female', birthYear: 2012, birthOrder: 1 },
-      p20: { name: 'Giang Thị Tiền', gender: 'female' },
-      p21: { name: 'Nguyễn Hoàng Vĩnh', gender: 'male', birthOrder: 1 },
-      p22: { name: 'Nguyễn Hoàng Yến Vy', gender: 'female', birthOrder: 2 },
-      p23: { name: 'Nguyễn Văn Nương', gender: 'male' },
-      p24: { name: 'Trương Thị Đáng', gender: 'female' },
-      p25: { name: 'Nguyễn Văn Châu', gender: 'male', birthOrder: 2 },
-      p26: { name: '5 Ro', gender: 'male', birthOrder: 4, tag: 'aka' },
-      p27: { name: '7 Re', gender: 'male', birthOrder: 6, tag: 'aka' },
-      p28: { name: '8 Khoe', gender: 'male', birthOrder: 7, tag: 'aka' },
-      p29: { name: 'Nguyễn Văn Hậu', gender: 'male' },
-      p30: { name: 'Lê Văn Thôi', gender: 'male' },
-      p31: { name: 'Huỳnh Thị Thanh', gender: 'female' },
-      p32: { name: 'Lê Văn Xinh', gender: 'male', birthOrder: 2, tag: 'aka ông 3' },
-      p33: { name: 'Lê Văn Cưởng', gender: 'male' },
-      p34: { name: 'Đặng Thị Hiếu', gender: 'female', birthOrder: 5, tag: 'aka bà 6' },
-      p35: { name: '3 Mi', gender: 'male', birthOrder: 2, tag: 'aka' },
-      p36: { name: '6 Ren', gender: 'male', birthOrder: 5, tag: 'aka' },
-      p37: { name: 'Nguyễn Văn Thống', gender: 'male', birthOrder: 3, tag: 'aka ông Tư' },
-      p38: { name: 'Nguyễn Văn Hoa', gender: 'male', birthOrder: 6 },
-      p39: { name: 'Nguyễn Thị Bông', gender: 'female', birthOrder: 7, tag: 'aka bà Tám' },
-      p40: { name: 'Nguyễn Thị Yến Loan', gender: 'female', birthOrder: 1 },
       p41: { name: 'Nguyễn Thu Hiền', gender: 'female', birthOrder: 1 },
+      p19: { name: 'Nguyễn Phạm Minh Thư', gender: 'female', birthYear: 2012, birthOrder: 1 },
       p42: { name: 'Nguyễn Hoà Tú Yên', gender: 'female', birthYear: 2011, birthOrder: 1 },
-      p43: { name: 'Nguyễn Đăng Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 },
-      p44: { name: 'Đặng ? ?', gender: 'male', birthOrder: 6, tag: 'aka 7 Đực' },
-      p45: { name: '2 Mơi', gender: 'male', birthOrder: 1, tag: 'aka' },
-      p46: { name: '4 Ron', gender: 'male', birthOrder: 3, tag: 'aka' },
-      p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
-      p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
-      p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
-      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 }
+      p43: { name: 'Nguyễn Đăng Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 }
     };
 
     const spouseEdges = [
-      ['p6','p7'], ['p23','p24'], ['p30','p31'], ['p2','p3'], ['p9','p13'], ['p10','p14'], ['p15','p17'], ['p12','p20'], ['p5','p41']
+      ['p63','p64'],
+      ['p2','p3'],
+      ['p5','p41'],
+      ['p70','p79'],
+      ['p66','p82'],
+      ['p67','p80'],
+      ['p68','p81']
     ];
 
     const parentEdges = [
-      ['p6','p2'],
-      ['p7','p2'],
+      ['p63','p3'],
+      ['p64','p3'],
+      ['p63','p65'],
+      ['p64','p65'],
+      ['p63','p66'],
+      ['p64','p66'],
+      ['p63','p67'],
+      ['p64','p67'],
+      ['p63','p68'],
+      ['p64','p68'],
+      ['p63','p69'],
+      ['p64','p69'],
+      ['p63','p70'],
+      ['p64','p70'],
+      ['p66','p71'],
+      ['p66','p72'],
+      ['p66','p73'],
+      ['p82','p71'],
+      ['p82','p72'],
+      ['p82','p73'],
+      ['p67','p74'],
+      ['p67','p75'],
+      ['p67','p76'],
+      ['p80','p74'],
+      ['p80','p75'],
+      ['p80','p76'],
+      ['p68','p77'],
+      ['p68','p78'],
+      ['p81','p77'],
+      ['p81','p78'],
+      ['p70','p83'],
+      ['p70','p84'],
+      ['p70','p85'],
+      ['p79','p83'],
+      ['p79','p84'],
+      ['p79','p85'],
+      ['p65','p86'],
       ['p2','p1'],
       ['p2','p5'],
       ['p3','p1'],
       ['p3','p5'],
-      ['p6','p9'],
-      ['p6','p10'],
-      ['p6','p11'],
-      ['p6','p12'],
-      ['p7','p9'],
-      ['p7','p10'],
-      ['p7','p11'],
-      ['p7','p12'],
-      ['p10','p15'],
-      ['p10','p16'],
-      ['p14','p15'],
-      ['p14','p16'],
-      ['p15','p18'],
-      ['p17','p18'],
       ['p1','p19'],
-      ['p12','p21'],
-      ['p12','p22'],
-      ['p20','p21'],
-      ['p20','p22'],
-      ['p23','p6'],
-      ['p24','p6'],
-      ['p23','p25'],
-      ['p24','p25'],
-      ['p23','p37'],
-      ['p23','p38'],
-      ['p23','p39'],
-      ['p24','p37'],
-      ['p24','p38'],
-      ['p24','p39'],
-      ['p23','p47'],
-      ['p23','p48'],
-      ['p23','p49'],
-      ['p24','p47'],
-      ['p24','p48'],
-      ['p24','p49'],
-      ['p25','p26'],
-      ['p25','p27'],
-      ['p25','p28'],
-      ['p25','p35'],
-      ['p25','p36'],
-      ['p25','p45'],
-      ['p25','p46'],
-      ['p28','p29'],
-      ['p30','p7'],
-      ['p30','p32'],
-      ['p30','p33'],
-      ['p31','p7'],
-      ['p31','p32'],
-      ['p31','p33'],
-      ['p32','p50'],
-      ['p31','p34'],
-      ['p31','p44'],
-      ['p5','p42'],
-      ['p5','p43'],
       ['p41','p42'],
-      ['p41','p43']
+      ['p41','p43'],
+      ['p5','p42'],
+      ['p5','p43']
     ];
-    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'], ['p37','p40'] ];
+    const adoptiveEdges = [];
 
 
     const ids = Object.keys(people);
@@ -276,6 +249,40 @@
       return out;
     }
 
+    function sortByBirthOrder(idsInRow) {
+      return [...idsInRow].sort((a, b) => {
+        const oa = Number(people[a].birthOrder);
+        const ob = Number(people[b].birthOrder);
+        const aHasOrder = Number.isFinite(oa);
+        const bHasOrder = Number.isFinite(ob);
+        if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
+        if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+        return (people[a]?.name || '').localeCompare((people[b]?.name || ''), 'vi');
+      });
+    }
+
+    function reorderSiblingGroupsByBirthOrder(row, g) {
+      const byParentKey = new Map();
+      for (const id of row) {
+        const pars = (parentList[id] || [])
+          .filter((p) => gen[p] === g - 1)
+          .sort();
+        if (!pars.length) continue;
+        const key = pars.join('|');
+        if (!byParentKey.has(key)) byParentKey.set(key, []);
+        byParentKey.get(key).push(id);
+      }
+      let out = [...row];
+      for (const siblings of byParentKey.values()) {
+        if (siblings.length <= 1) continue;
+        const siblingSet = new Set(siblings);
+        const sortedSiblings = sortByBirthOrder(siblings);
+        let i = 0;
+        out = out.map((id) => (siblingSet.has(id) ? sortedSiblings[i++] : id));
+      }
+      return out;
+    }
+
     const gens = Object.keys(groups).map(Number).sort((a, b) => a - b);
     gens.forEach((g, rowIdx) => {
       let row = [...groups[g]];
@@ -299,7 +306,7 @@
           return people[a].name.localeCompare(people[b].name, 'vi');
         });
       }
-      row = pairSpousesAdjacent(row, g);
+      if (g !== -1) row = pairSpousesAdjacent(row, g);
 
       // Temporary manual layout hints (HTML-only):
       // - Keep p23/p24 to the left of p30/p31 on generation -3.
@@ -342,6 +349,11 @@
           row.splice(i44, 1);
           row.splice(i34, 0, 'p44');
         }
+      }
+      if (g === -1) {
+        row = sortByBirthOrder(row);
+      } else {
+        row = reorderSiblingGroupsByBirthOrder(row, g);
       }
       row = pairSpousesAdjacent(row, g);
       groups[g] = row;
@@ -445,35 +457,27 @@
       }
     });
 
-    // Temporary manual layout: shift whole gen -2 to the center of gen -1.
-    const genMinus2 = groups[-2] || [];
-    const genMinus1 = groups[-1] || [];
-    if (genMinus2.length && genMinus1.length) {
-      const rowCenter = (idsInRow) => {
-        const left = Math.min(...idsInRow.map((id) => provisionalPos[id].x));
-        const right = Math.max(...idsInRow.map((id) => provisionalPos[id].x + provisionalPos[id].w));
-        return (left + right) / 2;
-      };
-      const shift = rowCenter(genMinus1) - rowCenter(genMinus2);
-      for (const id of genMinus2) {
-        provisionalPos[id].x += shift;
-      }
-    }
-
-    // Temporary manual layout for gen -3:
-    // - center pair p23/p24 on p38
-    // - center pair p30/p31 on p33
-    const centerNode = (id) => provisionalPos[id] ? (provisionalPos[id].x + provisionalPos[id].w / 2) : null;
-    const shiftPairToTarget = (a, b, target) => {
-      if (!provisionalPos[a] || !provisionalPos[b] || !provisionalPos[target]) return;
-      const pairCenter = (centerNode(a) + centerNode(b)) / 2;
-      const targetCenter = centerNode(target);
-      const dx = targetCenter - pairCenter;
-      provisionalPos[a].x += dx;
-      provisionalPos[b].x += dx;
+    // Align gen -2 and gen -1 to the horizontal center of gen 0.
+    const rowCenter = (idsInRow) => {
+      const available = idsInRow.filter((id) => provisionalPos[id]);
+      if (!available.length) return null;
+      const left = Math.min(...available.map((id) => provisionalPos[id].x));
+      const right = Math.max(...available.map((id) => provisionalPos[id].x + provisionalPos[id].w));
+      return (left + right) / 2;
     };
-    shiftPairToTarget('p23', 'p24', 'p38');
-    shiftPairToTarget('p30', 'p31', 'p33');
+    const shiftRowToTargetCenter = (idsInRow, targetCenter) => {
+      if (targetCenter == null) return;
+      const currentCenter = rowCenter(idsInRow);
+      if (currentCenter == null) return;
+      const dx = targetCenter - currentCenter;
+      for (const id of idsInRow) {
+        if (!provisionalPos[id]) continue;
+        provisionalPos[id].x += dx;
+      }
+    };
+    const gen0Center = rowCenter(groups[0] || []);
+    shiftRowToTargetCenter(groups[-1] || [], gen0Center);
+    shiftRowToTargetCenter(groups[-2] || [], gen0Center);
 
     const allPos = Object.values(provisionalPos);
     const minX = allPos.length ? Math.min(...allPos.map((p) => p.x)) : 0;
@@ -615,6 +619,7 @@
       g.setAttribute('class', `node ${person.gender || 'unknown'}`);
       const targetUrl =
         (id === 'p6' || id === 'p7') ? publicChartUrl :
+        (id === 'p2') ? publicChartUrl :
         (id === 'p25') ? publicChart2Url :
         (id === 'p32') ? publicChart3Url :
         (id === 'p34') ? publicChart4Url :

@@ -534,6 +534,7 @@
     const publicChart2Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree2.html';
     const publicChart3Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree3.html';
     const publicChart4Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree4.html';
+    const publicChart5Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree5.html';
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
@@ -664,6 +665,7 @@
         (id === 'p25') ? publicChart2Url :
         (id === 'p32') ? publicChart3Url :
         (id === 'p34') ? publicChart4Url :
+        (id === 'p3') ? publicChart5Url :
         null;
       if (targetUrl) {
         g.style.cursor = 'pointer';
