@@ -64,7 +64,7 @@
       p1: { name: 'Nguyễn Hải Quyền', gender: 'male', birthYear: 1979, birthOrder: 1 },
       p2: { name: 'Nguyễn Toàn Thắng', gender: 'male', birthYear: 1954, birthOrder: 2 },
       p3: { name: 'Hà Kim Tiến', gender: 'female', birthYear: 1956, birthOrder: 3 },
-      p5: { name: 'Nguyễn Huy Nhiệm', gender: 'male', birthYear: 1980, birthOrder: 2 },
+      p5: { name: 'Nguyễn Huy Nhiệm', gender: 'male', birthYear: 1980, birthOrder: 2, tag: 'aka Qui' },
       p6: { name: 'Nguyễn Văn Truyền', gender: 'male', birthOrder: 5 },
       p7: { name: 'Lê Thị Thưởng', gender: 'female', birthOrder: 4 },
       p8: { name: 'Nguyễn Thành Quân', gender: 'male', birthYear: 1950, birthOrder: 1 },
@@ -89,6 +89,8 @@
       p27: { name: '7 Re', gender: 'male', birthOrder: 6, tag: 'aka' },
       p28: { name: '8 Khoe', gender: 'male', birthOrder: 7, tag: 'aka' },
       p29: { name: 'Nguyễn Văn Hậu', gender: 'male' },
+      p93: { name: 'Liên', gender: 'female' },
+      p94: { name: 'Mãi', gender: 'male' },
       p30: { name: 'Lê Văn Thôi', gender: 'male' },
       p31: { name: 'Huỳnh Thị Thanh', gender: 'female' },
       p32: { name: 'Lê Văn Xinh', gender: 'male', birthOrder: 2, tag: 'aka ông 3' },
@@ -112,14 +114,19 @@
       p58: { name: 'Tư Lấm', gender: 'female', birthOrder: 3, tag: 'aka' },
       p59: { name: '9 Mai', gender: 'female', birthOrder: 8, tag: 'aka' },
       p60: { name: 'Út Lập', gender: 'male', birthOrder: 9, tag: 'aka' },
+      p92: { name: '6 Đỏ', gender: 'female', birthOrder: 5, tag: 'aka' },
       p61: { name: 'Quỳ', gender: 'male', tag: 'aka' },
       p62: { name: 'Xô', gender: 'male', tag: 'aka' },
+      p90: { name: 'Tuyết', gender: 'female', tag: 'aka' },
+      p91: { name: 'Xo', gender: 'male', tag: 'aka' },
+      p95: { name: 'Lượm', gender: 'male' },
+      p96: { name: 'Trừ', gender: 'male' },
       p87: { name: '???', gender: 'male' },
       p88: { name: '10', gender: 'male', birthOrder: 9, tag: 'aka' }
     };
 
     const spouseEdges = [
-      ['p6','p7'], ['p23','p24'], ['p30','p31'], ['p2','p3'], ['p9','p13'], ['p10','p14'], ['p15','p17'], ['p12','p20'], ['p5','p41']
+      ['p6','p7'], ['p23','p24'], ['p30','p31'], ['p2','p3'], ['p9','p13'], ['p10','p14'], ['p15','p17'], ['p12','p20'], ['p5','p41'], ['p90','p91'], ['p58','p96']
     ];
 
     const parentEdges = [
@@ -173,6 +180,8 @@
       ['p25','p36'],
       ['p25','p45'],
       ['p25','p46'],
+      ['p26','p93'],
+      ['p26','p94'],
       ['p28','p29'],
       ['p30','p7'],
       ['p30','p32'],
@@ -185,8 +194,14 @@
       ['p34','p58'],
       ['p34','p59'],
       ['p34','p60'],
+      ['p34','p92'],
+      ['p60','p95'],
       ['p58','p61'],
       ['p58','p62'],
+      ['p58','p90'],
+      ['p96','p61'],
+      ['p96','p62'],
+      ['p96','p90'],
       ['p31','p44'],
       ['p5','p42'],
       ['p5','p43'],
