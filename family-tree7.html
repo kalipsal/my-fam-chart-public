@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Family Tree (Nguyễn Văn Châu)</title>
+  <title>Family Tree (Nhánh p102)</title>
   <style>
     :root {
       --male: #3b82f6;
@@ -46,7 +46,7 @@
 </head>
 <body>
   <div class="topbar">
-    <strong>Family Tree (Nguyễn Văn Châu)</strong>
+    <strong>Family Tree (Nhánh p102)</strong>
     <span class="legend"><i class="dot" style="background:#3b82f6"></i>Nam</span>
     <span class="legend"><i class="dot" style="background:#f59e0b"></i>Nữ</span>
     <span class="legend"><i class="dot" style="background:#8b5cf6"></i>Vợ/Chồng</span>
@@ -61,154 +61,30 @@
 
   <script>
     const people = {
-      p1: { name: 'Nguyễn Hải Quyền', gender: 'male', birthYear: 1979, birthOrder: 1 },
-      p2: { name: 'Nguyễn Toàn Thắng', gender: 'male', birthYear: 1954, birthOrder: 2 },
-      p3: { name: 'Hà Kim Tiến', gender: 'female', birthYear: 1956, birthOrder: 3 },
-      p5: { name: 'Nguyễn Huy Nhiệm', gender: 'male', birthYear: 1980, birthOrder: 2, tag: 'aka Qui' },
-      p6: { name: 'Nguyễn Văn Truyền', gender: 'male', birthOrder: 5 },
-      p7: { name: 'Lê Thị Thưởng', gender: 'female', birthOrder: 4 },
-      p8: { name: 'Nguyễn Thành Quân', gender: 'male', birthYear: 1950, birthOrder: 1 },
-      p9: { name: 'Nguyễn Thị Bính', gender: 'female', birthYear: 1956, birthOrder: 3 },
-      p10: { name: 'Nguyễn Thị Trinh', gender: 'female', birthYear: 1960, birthOrder: 4 },
-      p11: { name: 'Nguyễn Văn Phê', gender: 'male', birthYear: 1962, birthOrder: 5 },
-      p12: { name: 'Nguyễn Toàn Văn', gender: 'male', birthYear: 1964, birthOrder: 6 },
-      p13: { name: 'Nguyễn Văn Bằng', gender: 'male', birthOrder: 3 },
-      p14: { name: 'Võ Văn Hồng', gender: 'male' },
-      p15: { name: 'Võ Nguyễn Trang Phương', gender: 'female', birthYear: 1988, birthOrder: 1 },
-      p16: { name: 'Võ Nguyễn Phương Quyên', gender: 'female', birthYear: 1997, birthOrder: 2 },
-      p17: { name: 'Nguyễn Quang Ngô', gender: 'male' },
-      p18: { name: 'Nguyễn Phương Nghi', gender: 'female', birthYear: 2018, birthOrder: 1, tag: 'aka Moon' },
-      p19: { name: 'Nguyễn Phạm Minh Thư', gender: 'female', birthYear: 2012, birthOrder: 1 },
-      p20: { name: 'Giang Thị Tiền', gender: 'female' },
-      p21: { name: 'Nguyễn Hoàng Vĩnh', gender: 'male', birthOrder: 1 },
-      p22: { name: 'Nguyễn Hoàng Yến Vy', gender: 'female', birthOrder: 2 },
-      p23: { name: 'Nguyễn Văn Nương', gender: 'male', birthOrder: 1 },
-      p24: { name: 'Trương Thị Đáng', gender: 'female' },
-      p25: { name: 'Nguyễn Văn Châu', gender: 'male', birthOrder: 2 },
-      p26: { name: '5 Ro', gender: 'male', birthOrder: 4, tag: 'aka' },
-      p27: { name: '7 Re', gender: 'male', birthOrder: 6, tag: 'aka' },
-      p28: { name: '8 Khoe', gender: 'male', birthOrder: 7, tag: 'aka' },
-      p29: { name: 'Nguyễn Phúc Hậu', gender: 'male', birthOrder: 3, tag: 'aka Hậu anh' },
-      p103: { name: '? ?', gender: 'female', birthOrder: 1 },
-      p104: { name: 'Nguyễn Phước', gender: 'male', birthOrder: 2 },
-      p105: { name: 'Hậu em', gender: 'male', birthOrder: 4, tag: 'aka' },
-      p93: { name: 'Liên', gender: 'female' },
-      p94: { name: 'Mãi', gender: 'male' },
-      p30: { name: 'Lê Văn Thôi', gender: 'male' },
-      p31: { name: 'Huỳnh Thị Thanh', gender: 'female' },
-      p32: { name: 'Lê Văn Xinh', gender: 'male', birthOrder: 2, tag: 'aka ông 3' },
-      p33: { name: 'Lê Văn Cưởng', gender: 'male' },
-      p34: { name: 'Đặng Thị Hiếu', gender: 'female', birthOrder: 5, tag: 'aka bà 6' },
-      p35: { name: '3 Mi', gender: 'male', birthOrder: 2, tag: 'aka' },
-      p36: { name: '6 Ren', gender: 'male', birthOrder: 5, tag: 'aka' },
-      p37: { name: 'Nguyễn Văn Thống', gender: 'male', birthOrder: 3, tag: 'aka ông Tư' },
-      p38: { name: 'Nguyễn Văn Hoa', gender: 'male', birthOrder: 6 },
-      p39: { name: 'Nguyễn Thị Bông', gender: 'female', birthOrder: 7, tag: 'aka bà Tám' },
-      p40: { name: 'Nguyễn Thị Yến Loan', gender: 'female', birthOrder: 1 },
-      p97: { name: 'bà Tư', gender: 'female', tag: 'aka' },
-      p98: { name: '? Mất sớm khó nuôi', gender: 'male' },
-      p101: { name: 'Út Long', gender: 'male', birthOrder: 1, tag: 'aka' },
-      p41: { name: 'Nguyễn Thu Hiền', gender: 'female', birthOrder: 1 },
-      p42: { name: 'Nguyễn Hoà Tú Yên', gender: 'female', birthYear: 2011, birthOrder: 1 },
-      p43: { name: 'Nguyễn Đăng Kiên', gender: 'male', birthYear: 2015, birthOrder: 2 },
-      p44: { name: 'Đặng ? ?', gender: 'male', birthOrder: 6, tag: 'aka 7 Đực' },
-      p45: { name: '2 Mơi', gender: 'male', birthOrder: 1, tag: 'aka' },
-      p46: { name: '4 Ron', gender: 'male', birthOrder: 3, tag: 'aka' },
-      p47: { name: 'Nguyễn Văn Ngàn', gender: 'male', birthOrder: 1 },
-      p48: { name: 'Nguyễn Văn Lạc', gender: 'male', birthOrder: 4 },
-      p49: { name: 'Nguyễn Thị Tươi', gender: 'female', birthOrder: 8 },
-      p50: { name: 'Nguyễn Văn Hảo', gender: 'male', birthOrder: 1 },
       p87: { name: '???', gender: 'male' },
+      p23: { name: 'Nguyễn Văn Nương', gender: 'male', birthOrder: 1 },
       p88: { name: '10', gender: 'male', birthOrder: 9, tag: 'aka' },
-      p102: { name: '???', gender: 'male', birthOrder: 3 }
+      p102: { name: '???', gender: 'male', birthOrder: 3 },
+      p106: { name: '3 Nghiêu', gender: 'male', birthOrder: 2, tag: 'aka' },
+      p107: { name: '7 Liên', gender: 'male', birthOrder: 6, tag: 'aka' },
     };
 
     const spouseEdges = [
-      ['p6','p7'], ['p23','p24'], ['p30','p31'], ['p2','p3'], ['p9','p13'], ['p10','p14'], ['p15','p17'], ['p12','p20'], ['p5','p41'], ['p37','p97']
     ];
 
     const parentEdges = [
-      ['p6','p2'],
-      ['p7','p2'],
-      ['p2','p1'],
-      ['p2','p5'],
-      ['p3','p1'],
-      ['p3','p5'],
-      ['p6','p9'],
-      ['p6','p10'],
-      ['p6','p11'],
-      ['p6','p12'],
-      ['p7','p9'],
-      ['p7','p10'],
-      ['p7','p11'],
-      ['p7','p12'],
-      ['p10','p15'],
-      ['p10','p16'],
-      ['p14','p15'],
-      ['p14','p16'],
-      ['p15','p18'],
-      ['p17','p18'],
-      ['p1','p19'],
-      ['p12','p21'],
-      ['p12','p22'],
-      ['p20','p21'],
-      ['p20','p22'],
-      ['p23','p6'],
       ['p87','p23'],
       ['p87','p88'],
       ['p87','p102'],
-      ['p24','p6'],
-      ['p23','p25'],
-      ['p24','p25'],
-      ['p23','p37'],
-      ['p23','p38'],
-      ['p23','p39'],
-      ['p24','p37'],
-      ['p24','p38'],
-      ['p24','p39'],
-      ['p37','p98'],
-      ['p97','p98'],
-      ['p37','p40'],
-      ['p37','p101'],
-      ['p23','p47'],
-      ['p23','p48'],
-      ['p23','p49'],
-      ['p24','p47'],
-      ['p24','p48'],
-      ['p24','p49'],
-      ['p25','p26'],
-      ['p25','p27'],
-      ['p25','p28'],
-      ['p25','p35'],
-      ['p25','p36'],
-      ['p25','p45'],
-      ['p25','p46'],
-      ['p26','p93'],
-      ['p26','p94'],
-      ['p28','p29'],
-      ['p28','p103'],
-      ['p28','p104'],
-      ['p28','p105'],
-      ['p30','p7'],
-      ['p30','p32'],
-      ['p30','p33'],
-      ['p31','p7'],
-      ['p31','p32'],
-      ['p31','p33'],
-      ['p32','p50'],
-      ['p31','p34'],
-      ['p31','p44'],
-      ['p5','p42'],
-      ['p5','p43'],
-      ['p41','p42'],
-      ['p41','p43']
+      ['p102','p106'],
+      ['p106','p107']
     ];
-    const adoptiveEdges = [ ['p6','p8'], ['p7','p8'] ];
+    const adoptiveEdges = [];
 
 
     const ids = Object.keys(people);
     const gen = Object.fromEntries(ids.map(id => [id, null]));
-    gen.p1 = 0;
+    gen.p87 = -4;
 
     const parentsOf = Object.fromEntries(ids.map(id => [id, []]));
     const childrenOf = Object.fromEntries(ids.map(id => [id, []]));
@@ -299,30 +175,40 @@
       return out;
     }
 
-    function reorderChildrenOfParentByOrder(row, parentId) {
-      const childSet = new Set(
-        row.filter((id) => (parentList[id] || []).includes(parentId))
-      );
-      if (childSet.size < 2) return row;
-      const sortedChildren = row
-        .filter((id) => childSet.has(id))
-        .sort((a, b) => {
+    function moveIdBefore(row, id, targetId) {
+      const from = row.indexOf(id);
+      const to = row.indexOf(targetId);
+      if (from === -1 || to === -1 || from === to) return row;
+      row.splice(from, 1);
+      const nextTo = row.indexOf(targetId);
+      row.splice(nextTo, 0, id);
+      return row;
+    }
+
+    function moveIdAfter(row, id, targetId) {
+      const from = row.indexOf(id);
+      const to = row.indexOf(targetId);
+      if (from === -1 || to === -1 || from === to) return row;
+      row.splice(from, 1);
+      const nextTo = row.indexOf(targetId);
+      row.splice(nextTo + 1, 0, id);
+      return row;
+    }
+
+    const gens = Object.keys(groups).map(Number).sort((a, b) => a - b);
+    gens.forEach((g, rowIdx) => {
+      let row = [...groups[g]];
+      if (g === -2 || g === -3) {
+        row.sort((a, b) => {
           const oa = Number(people[a].birthOrder);
           const ob = Number(people[b].birthOrder);
           const aHasOrder = Number.isFinite(oa);
           const bHasOrder = Number.isFinite(ob);
           if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
           if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
-          return (people[a]?.name || '').localeCompare((people[b]?.name || ''), 'vi');
+          return (people[a]?.name || '').localeCompare(people[b]?.name || '', 'vi');
         });
-      let idx = 0;
-      return row.map((id) => childSet.has(id) ? sortedChildren[idx++] : id);
-    }
-
-    const gens = Object.keys(groups).map(Number).sort((a, b) => a - b);
-    gens.forEach((g, rowIdx) => {
-      let row = [...groups[g]];
-      if (rowIdx === 0) {
+      } else if (rowIdx === 0) {
         row.sort((a, b) => people[a].name.localeCompare(people[b].name, 'vi'));
       } else {
         const prev = groups[gens[rowIdx - 1]] || [];
@@ -344,50 +230,14 @@
       }
       row = pairSpousesAdjacent(row, g);
 
-      // Temporary manual layout hints (HTML-only):
-      // - Keep p23/p24 to the left of p30/p31 on generation -3.
-      // - On generation -2, move Nguyen branch to the left,
-      //   while keeping p6/p7 centered as the main pair.
-      if (g === -3) {
-        row = reorderByPreferredIds(row, ['p23', 'p24', 'p102', 'p88', 'p30', 'p31']);
-      }
-      row = reorderChildrenOfParentByOrder(row, 'p28');
-      if (g === -2) {
-        // Reorder only the p23/p24 sibling branch (p25 side) by birthOrder.
-        // Keep p6 in its current slot to preserve the p6/p7 main couple position.
-        const p2523SiblingSet = new Set(
-          row.filter((id) => {
-            const parents = parentList[id] || [];
-            return parents.includes('p23') && parents.includes('p24');
-          })
-        );
-        const sortedP2523Siblings = row
-          .filter((id) => p2523SiblingSet.has(id) && id !== 'p6')
-          .sort((a, b) => {
-            const oa = Number(people[a].birthOrder);
-            const ob = Number(people[b].birthOrder);
-            const aHasOrder = Number.isFinite(oa);
-            const bHasOrder = Number.isFinite(ob);
-            if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
-            if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
-            return (people[a]?.name || '').localeCompare(people[b]?.name || '', 'vi');
-          });
-        let iSibling = 0;
-        row = row.map((id) => {
-          if (id === 'p6') return id;
-          if (!p2523SiblingSet.has(id)) return id;
-          return sortedP2523Siblings[iSibling++];
-        });
-
-        // Keep p44 to the right of p34.
-        const i34 = row.indexOf('p34');
-        const i44 = row.indexOf('p44');
-        if (i34 !== -1 && i44 !== -1 && i44 < i34) {
-          row.splice(i44, 1);
-          row.splice(i34, 0, 'p44');
-        }
-      }
       row = pairSpousesAdjacent(row, g);
+      if (g === -2) {
+        row = moveIdBefore(row, 'p97', 'p37');
+        row = moveIdAfter(row, 'p99', 'p37');
+        row = moveIdAfter(row, 'p100', 'p99');
+        row = moveIdBefore(row, 'p99', 'p48');
+        row = moveIdBefore(row, 'p100', 'p48');
+      }
       groups[g] = row;
     });
 
@@ -395,6 +245,15 @@
       const parts = (full || '').trim().split(/\s+/).filter(Boolean);
       if (parts.length <= 1) return { given: '', family: full || '' };
       return { given: parts.slice(1).join(' '), family: parts[0] };
+    }
+
+    function displayNameFor(person) {
+      const rawName = (person?.name || '').trim();
+      const unknownName = rawName && rawName.replace(/\?/g, '').trim() === '';
+      const tag = person?.tag || '';
+      const akaMatch = typeof tag === 'string' ? tag.match(/^aka\s+(.+)$/i) : null;
+      if ((!rawName || unknownName) && akaMatch && akaMatch[1]) return akaMatch[1].trim();
+      return rawName || '?';
     }
 
     const nodeH = 60;
@@ -416,9 +275,10 @@
     const nodeMeta = {};
     for (const id of ids) {
       const person = people[id];
-      const display = splitDisplayName(person.name);
+      const displayName = displayNameFor(person);
+      const display = splitDisplayName(displayName);
       const sub = `${id} | ${person.birthOrder ?? '-'}${person.tag ? ' | ' + person.tag : ''}`;
-      const wFamily = measureText(display.family || person.name, '700 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
+      const wFamily = measureText(display.family || displayName, '700 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
       const wGiven = measureText(display.given || ' ', '400 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
       const wSub = measureText(sub, '400 10px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial');
       const w = Math.max(minNodeW, Math.min(maxNodeW, Math.ceil(Math.max(wFamily, wGiven, wSub) + padX * 2 + 2)));
@@ -489,58 +349,20 @@
       }
     });
 
-    // Temporary manual layout: shift whole gen -2 to the center of gen -1.
-    const genMinus2 = groups[-2] || [];
-    const genMinus1 = groups[-1] || [];
-    if (genMinus2.length && genMinus1.length) {
-      const rowCenter = (idsInRow) => {
-        const left = Math.min(...idsInRow.map((id) => provisionalPos[id].x));
-        const right = Math.max(...idsInRow.map((id) => provisionalPos[id].x + provisionalPos[id].w));
-        return (left + right) / 2;
-      };
-      const shift = rowCenter(genMinus1) - rowCenter(genMinus2);
-      for (const id of genMinus2) {
-        provisionalPos[id].x += shift;
+    if (provisionalPos.p23 && provisionalPos.p48) {
+      const p48Center = provisionalPos.p48.x + provisionalPos.p48.w / 2;
+      const p23Center = provisionalPos.p23.x + provisionalPos.p23.w / 2;
+      const dx = p48Center - p23Center;
+      for (const id of ids) {
+        if (gen[id] === -3 && provisionalPos[id]) {
+          provisionalPos[id].x += dx;
+        }
       }
     }
-
-    // Shift whole gen -4 to center on p39.
-    const genMinus4 = groups[-4] || [];
-    if (genMinus4.length && provisionalPos.p39) {
-      const rowCenter = (idsInRow) => {
-        const left = Math.min(...idsInRow.map((id) => provisionalPos[id].x));
-        const right = Math.max(...idsInRow.map((id) => provisionalPos[id].x + provisionalPos[id].w));
-        return (left + right) / 2;
-      };
-      const p39Center = provisionalPos.p39.x + provisionalPos.p39.w / 2;
-      const shift = p39Center - rowCenter(genMinus4);
-      for (const id of genMinus4) {
-        provisionalPos[id].x += shift;
-      }
+    if (provisionalPos.p87 && provisionalPos.p102) {
+      const p102Center = provisionalPos.p102.x + provisionalPos.p102.w / 2;
+      provisionalPos.p87.x = p102Center - provisionalPos.p87.w / 2;
     }
-
-    // Temporary manual layout for gen -3:
-    // - center pair p23/p24 on p38
-    // - center pair p30/p31 on p33
-    const centerNode = (id) => provisionalPos[id] ? (provisionalPos[id].x + provisionalPos[id].w / 2) : null;
-    const shiftPairToTarget = (a, b, target) => {
-      if (!provisionalPos[a] || !provisionalPos[b] || !provisionalPos[target]) return;
-      const pairCenter = (centerNode(a) + centerNode(b)) / 2;
-      const targetCenter = centerNode(target);
-      const dx = targetCenter - pairCenter;
-      provisionalPos[a].x += dx;
-      provisionalPos[b].x += dx;
-    };
-    shiftPairToTarget('p23', 'p24', 'p38');
-    shiftPairToTarget('p30', 'p31', 'p33');
-    if (provisionalPos.p24 && provisionalPos.p102) {
-      provisionalPos.p102.x = provisionalPos.p24.x + provisionalPos.p24.w + xGap;
-    }
-    if (provisionalPos.p88) {
-      const anchor = provisionalPos.p102 || provisionalPos.p24;
-      if (anchor) provisionalPos.p88.x = anchor.x + anchor.w + xGap;
-    }
-
     const allPos = Object.values(provisionalPos);
     const minX = allPos.length ? Math.min(...allPos.map((p) => p.x)) : 0;
     const maxX = allPos.length ? Math.max(...allPos.map((p) => p.x + p.w)) : 0;
@@ -551,11 +373,7 @@
     const svg = document.getElementById('chart');
     const publicChartUrl = 'https://kalipsal.github.io/my-fam-chart-public/family-tree.html';
     const publicChart2Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree2.html';
-    const publicChart3Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree3.html';
-    const publicChart4Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree4.html';
-    const publicChart5Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree5.html';
     const publicChart6Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree6.html';
-    const publicChart7Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree7.html';
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
@@ -596,6 +414,19 @@
       svg.appendChild(line);
     }
 
+    function drawSoftFanPath(x1, y1, x2, y2, cls) {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const c1x = x1 + dx * 0.28;
+      const c2x = x1 + dx * 0.72;
+      const c1y = y1 + Math.max(10, Math.min(22, dy * 0.45));
+      const c2y = y2 - Math.max(8, Math.min(18, dy * 0.35));
+      p.setAttribute('d', `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`);
+      p.setAttribute('class', cls);
+      svg.appendChild(p);
+    }
+
     for (const [a, b] of spouseEdges) {
       if (!pos[a] || !pos[b]) continue;
       const y1 = pos[a].y + nodeH / 2;
@@ -626,36 +457,78 @@
         let merged = false;
 
         if (uniqPars.length >= 2) {
-          for (let i = 0; i < uniqPars.length && !merged; i++) {
-            for (let j = i + 1; j < uniqPars.length && !merged; j++) {
+          let chosen = null;
+          let chosenIsSpouse = false;
+
+          for (let i = 0; i < uniqPars.length && !chosen; i++) {
+            for (let j = i + 1; j < uniqPars.length && !chosen; j++) {
               const a = uniqPars[i];
               const b = uniqPars[j];
               const k = a < b ? `${a}|${b}` : `${b}|${a}`;
-              if (!spousePairSet.has(k)) continue;
+              if (spousePairSet.has(k)) {
+                chosen = [a, b];
+                chosenIsSpouse = true;
+              }
+            }
+          }
 
-              const ax = pos[a].x + pos[a].w / 2;
-              const bx = pos[b].x + pos[b].w / 2;
-              const px = (ax + bx) / 2;
-              const sy = Math.max(pos[a].y, pos[b].y) + nodeH / 2;
-              const py = Math.max(pos[a].y, pos[b].y) + nodeH + 14;
+          if (!chosen) {
+            let best = null;
+            for (let i = 0; i < uniqPars.length; i++) {
+              for (let j = i + 1; j < uniqPars.length; j++) {
+                const a = uniqPars[i];
+                const b = uniqPars[j];
+                const ax = pos[a].x + pos[a].w / 2;
+                const bx = pos[b].x + pos[b].w / 2;
+                const dist = Math.abs(ax - bx);
+                if (!best || dist < best.dist) best = { a, b, dist };
+              }
+            }
+            if (best) chosen = [best.a, best.b];
+          }
 
+          if (chosen) {
+            const [a, b] = chosen;
+            const k = a < b ? `${a}|${b}` : `${b}|${a}`;
+            const ax = pos[a].x + pos[a].w / 2;
+            const bx = pos[b].x + pos[b].w / 2;
+            const px = (ax + bx) / 2;
+            const sy = Math.max(pos[a].y, pos[b].y) + nodeH / 2;
+            const py = Math.max(pos[a].y, pos[b].y) + nodeH + 14;
+
+            if (chosenIsSpouse) {
               const dropKey = `${cls}|${k}`;
               if (!drawnDrop.has(dropKey)) {
                 drawLine(px, sy, px, py, 'edge-spouse');
                 drawnDrop.add(dropKey);
               }
+            }
 
-              const fanKey = `${cls}|${k}`;
-              if (!drawnFan.has(fanKey)) {
+            const fanKey = `${cls}|${k}|${chosenIsSpouse ? 'sp' : 'nsp'}`;
+            if (!drawnFan.has(fanKey)) {
+              if (chosenIsSpouse) {
                 drawLine(ax, pos[a].y + nodeH, px, py, cls);
                 drawLine(bx, pos[b].y + nodeH, px, py, cls);
-                drawnFan.add(fanKey);
+              } else {
+                drawSoftFanPath(ax, pos[a].y + nodeH, px, py, cls);
+                drawSoftFanPath(bx, pos[b].y + nodeH, px, py, cls);
               }
-
-              const cx = pos[c].x + pos[c].w / 2;
-              drawPath(px, py, cx, pos[c].y, cls);
-              merged = true;
+              drawnFan.add(fanKey);
             }
+
+            for (const p of uniqPars) {
+              if (p === a || p === b) continue;
+              const pxFrom = pos[p].x + pos[p].w / 2;
+              if (chosenIsSpouse) {
+                drawLine(pxFrom, pos[p].y + nodeH, px, py, cls);
+              } else {
+                drawSoftFanPath(pxFrom, pos[p].y + nodeH, px, py, cls);
+              }
+            }
+
+            const cx = pos[c].x + pos[c].w / 2;
+            drawPath(px, py, cx, pos[c].y, cls);
+            merged = true;
           }
         }
 
@@ -682,14 +555,8 @@
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', `node ${person.gender || 'unknown'}`);
       const targetUrl =
-        (id === 'p6' || id === 'p7') ? publicChartUrl :
-        (id === 'p25') ? publicChart2Url :
-        (id === 'p32') ? publicChart3Url :
-        (id === 'p34') ? publicChart4Url :
-        (id === 'p37') ? publicChart6Url :
+        (id === 'p102') ? publicChart6Url :
         (id === 'p23') ? publicChartUrl :
-        (id === 'p102') ? publicChart7Url :
-        (id === 'p3') ? publicChart5Url :
         null;
       if (targetUrl) {
         g.style.cursor = 'pointer';

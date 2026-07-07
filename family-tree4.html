@@ -88,7 +88,10 @@
       p26: { name: '5 Ro', gender: 'male', birthOrder: 4, tag: 'aka' },
       p27: { name: '7 Re', gender: 'male', birthOrder: 6, tag: 'aka' },
       p28: { name: '8 Khoe', gender: 'male', birthOrder: 7, tag: 'aka' },
-      p29: { name: 'Nguyễn Văn Hậu', gender: 'male' },
+      p29: { name: 'Nguyễn Phúc Hậu', gender: 'male', birthOrder: 3, tag: 'aka Hậu anh' },
+      p103: { name: '? ?', gender: 'female', birthOrder: 1 },
+      p104: { name: 'Nguyễn Phước', gender: 'male', birthOrder: 2 },
+      p105: { name: 'Hậu em', gender: 'male', birthOrder: 4, tag: 'aka' },
       p93: { name: 'Liên', gender: 'female' },
       p94: { name: 'Mãi', gender: 'male' },
       p30: { name: 'Lê Văn Thôi', gender: 'male' },
@@ -122,7 +125,8 @@
       p95: { name: 'Lượm', gender: 'male' },
       p96: { name: 'Trừ', gender: 'male' },
       p87: { name: '???', gender: 'male' },
-      p88: { name: '10', gender: 'male', birthOrder: 9, tag: 'aka' }
+      p88: { name: '10', gender: 'male', birthOrder: 9, tag: 'aka' },
+      p102: { name: '???', gender: 'male', birthOrder: 3 }
     };
 
     const spouseEdges = [
@@ -157,6 +161,7 @@
       ['p20','p22'],
       ['p87','p23'],
       ['p87','p88'],
+      ['p87','p102'],
       ['p23','p6'],
       ['p24','p6'],
       ['p23','p25'],
@@ -183,6 +188,9 @@
       ['p26','p93'],
       ['p26','p94'],
       ['p28','p29'],
+      ['p28','p103'],
+      ['p28','p104'],
+      ['p28','p105'],
       ['p30','p7'],
       ['p30','p32'],
       ['p30','p33'],
@@ -318,6 +326,26 @@
       return out;
     }
 
+    function reorderChildrenOfParentByOrder(row, parentId) {
+      const childSet = new Set(
+        row.filter((id) => (parentList[id] || []).includes(parentId))
+      );
+      if (childSet.size < 2) return row;
+      const sortedChildren = row
+        .filter((id) => childSet.has(id))
+        .sort((a, b) => {
+          const oa = Number(people[a].birthOrder);
+          const ob = Number(people[b].birthOrder);
+          const aHasOrder = Number.isFinite(oa);
+          const bHasOrder = Number.isFinite(ob);
+          if (aHasOrder && bHasOrder && oa !== ob) return oa - ob;
+          if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+          return (people[a]?.name || '').localeCompare((people[b]?.name || ''), 'vi');
+        });
+      let idx = 0;
+      return row.map((id) => childSet.has(id) ? sortedChildren[idx++] : id);
+    }
+
     const gens = Object.keys(groups).map(Number).sort((a, b) => a - b);
     gens.forEach((g, rowIdx) => {
       let row = [...groups[g]];
@@ -348,8 +376,9 @@
       // - On generation -2, move Nguyen branch to the left,
       //   while keeping p6/p7 centered as the main pair.
       if (g === -3) {
-        row = reorderByPreferredIds(row, ['p23', 'p24', 'p88', 'p30', 'p31']);
+        row = reorderByPreferredIds(row, ['p23', 'p24', 'p102', 'p88', 'p30', 'p31']);
       }
+      row = reorderChildrenOfParentByOrder(row, 'p28');
       if (g === -2) {
         // Reorder only the p23/p24 sibling branch (p25 side) by birthOrder.
         // Keep p6 in its current slot to preserve the p6/p7 main couple position.
@@ -550,8 +579,12 @@
     };
     shiftPairToTarget('p23', 'p24', 'p38');
     shiftPairToTarget('p30', 'p31', 'p33');
-    if (provisionalPos.p88 && provisionalPos.p24) {
-      provisionalPos.p88.x = provisionalPos.p24.x + provisionalPos.p24.w + xGap;
+    if (provisionalPos.p24 && provisionalPos.p102) {
+      provisionalPos.p102.x = provisionalPos.p24.x + provisionalPos.p24.w + xGap;
+    }
+    if (provisionalPos.p88) {
+      const anchor = provisionalPos.p102 || provisionalPos.p24;
+      if (anchor) provisionalPos.p88.x = anchor.x + anchor.w + xGap;
     }
 
     const allPos = Object.values(provisionalPos);
@@ -567,6 +600,8 @@
     const publicChart3Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree3.html';
     const publicChart4Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree4.html';
     const publicChart5Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree5.html';
+    const publicChart6Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree6.html';
+    const publicChart7Url = 'https://kalipsal.github.io/my-fam-chart-public/family-tree7.html';
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
@@ -697,6 +732,9 @@
         (id === 'p25') ? publicChart2Url :
         (id === 'p32') ? publicChart3Url :
         (id === 'p34') ? publicChart4Url :
+        (id === 'p37') ? publicChart6Url :
+        (id === 'p23') ? publicChartUrl :
+        (id === 'p102') ? publicChart7Url :
         (id === 'p3') ? publicChart5Url :
         null;
       if (targetUrl) {
